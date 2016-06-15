@@ -1,7 +1,7 @@
 <?php
 
-if ( ! class_exists( 'GHU_Core' ) ) {
-    class GHU_Core
+if ( ! class_exists( 'GHU_Lite' ) ) {
+    class GHU_Lite
     {
         public $plugins;
         public $update_data;
@@ -132,5 +132,5 @@ if ( ! class_exists( 'GHU_Core' ) ) {
         }
     }
 
-    new GHU_Core();
+    new GHU_Lite();
 }
