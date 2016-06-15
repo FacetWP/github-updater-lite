@@ -43,7 +43,7 @@ if ( ! class_exists( 'GHU_Core' ) ) {
                 if ( ! empty( $info['GitHub URI'] ) ) {
                     $temp = array(
                         'plugin'            => $slug,
-                        'slug'              => $slug,
+                        'slug'              => trim( dirname( $slug ), '/' ),
                         'name'              => $info['Name'],
                         'github_repo'       => $info['GitHub URI'],
                         'description'       => $info['Description'],
