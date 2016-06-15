@@ -5,7 +5,7 @@ This is a variant of Andy Fragen's excellent [GitHub Updater](https://github.com
 
 ## Usage
 
-Add the following line to your plugin's meta information, replacing `owner/repo` with your actual repository.
+Add the following line to your plugin's meta information, replacing `owner/repo` with your public repository.
 
 ```
 GitHub URI: owner/repo
