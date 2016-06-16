@@ -60,18 +60,20 @@ if ( ! class_exists( 'GHU_Core' ) ) {
                     list( $owner, $repo ) = explode( '/', $temp['github_repo'] );
                     $request = wp_remote_get( "https://api.github.com/repos/$owner/$repo/tags" );
 
-                    // validate response
+                    // WP error or rate limit exceeded
                     if ( is_wp_error( $request ) || 200 != wp_remote_retrieve_response_code( $request ) ) {
-                        return false;
+                        break;
                     }
 
                     $json = json_decode( $request['body'], true );
-                    $latest_tag = $json[0];
 
-                    $temp['new_version'] = $latest_tag['name'];
-                    $temp['url'] = "https://github.com/$owner/$repo/";
-                    $temp['package'] = $latest_tag['zipball_url'];
-                    $plugin_data[ $slug ] = $temp;
+                    if ( is_array( $json ) && ! empty( $json ) ) {
+                        $latest_tag = $json[0];
+                        $temp['new_version'] = $latest_tag['name'];
+                        $temp['url'] = "https://github.com/$owner/$repo/";
+                        $temp['package'] = $latest_tag['zipball_url'];
+                        $plugin_data[ $slug ] = $temp;
+                    }
                 }
             }
 
