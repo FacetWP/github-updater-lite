@@ -6,6 +6,7 @@ if ( ! class_exists( 'GHU_Core' ) ) {
     class GHU_Core
     {
         public $update_data;
+        public $active_plugins;
 
 
         function __construct() {
@@ -21,7 +22,13 @@ if ( ! class_exists( 'GHU_Core' ) ) {
             $now = strtotime( 'now' );
             $last_checked = (int) get_option( 'ghu_last_checked' );
             $check_interval = apply_filters( 'ghu_check_interval', ( 60 * 60 * 12 ) );
+
             $this->update_data = (array) get_option( 'ghu_update_data' );
+
+            $active = (array) get_option( 'active_plugins' );
+            foreach ( $active as $slug ) {
+                $this->active_plugins[ $slug ] = true;
+            }
 
             // transient expiration
             if ( ( $now - $last_checked ) > $check_interval ) {
@@ -40,7 +47,7 @@ if ( ! class_exists( 'GHU_Core' ) ) {
             $plugin_data = array();
             $plugins = get_plugins();
             foreach ( $plugins as $slug => $info ) {
-                if ( ! empty( $info['GitHub URI'] ) ) {
+                if ( isset( $this->active_plugins[ $slug ] ) && ! empty( $info['GitHub URI'] ) ) {
                     $temp = array(
                         'plugin'            => $slug,
                         'slug'              => trim( dirname( $slug ), '/' ),
@@ -104,11 +111,13 @@ if ( ! class_exists( 'GHU_Core' ) ) {
             }
 
             foreach ( $this->update_data as $plugin => $info ) {
-                $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
-                $version = $plugin_data['Version'];
+                if ( isset( $this->active_plugins[ $plugin ] ) ) {
+                    $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+                    $version = $plugin_data['Version'];
 
-                if ( version_compare( $version, $info['new_version'], '<' ) ) {
-                    $transient->response[ $plugin ] = (object) $info;
+                    if ( version_compare( $version, $info['new_version'], '<' ) ) {
+                        $transient->response[ $plugin ] = (object) $info;
+                    }
                 }
             }
 
