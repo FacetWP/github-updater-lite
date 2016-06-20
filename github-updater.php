@@ -22,10 +22,9 @@ if ( ! class_exists( 'GHU_Core' ) ) {
             $now = strtotime( 'now' );
             $last_checked = (int) get_option( 'ghu_last_checked' );
             $check_interval = apply_filters( 'ghu_check_interval', ( 60 * 60 * 12 ) );
-
             $this->update_data = (array) get_option( 'ghu_update_data' );
-
             $active = (array) get_option( 'active_plugins' );
+
             foreach ( $active as $slug ) {
                 $this->active_plugins[ $slug ] = true;
             }
