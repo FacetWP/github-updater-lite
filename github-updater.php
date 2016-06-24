@@ -132,8 +132,8 @@ if ( ! class_exists( 'GHU_Core' ) ) {
         function upgrader_source_selection( $source, $remote_source, $upgrader, $hook_extra = null ) {
             global $wp_filesystem;
 
-            $plugin = $hook_extra['plugin'];
-            if ( isset( $this->update_data[ $plugin ] ) ) {
+            $plugin = isset( $hook_extra['plugin'] ) ? $hook_extra['plugin'] : false;
+            if ( isset( $this->update_data[ $plugin ] ) && $plugin ) {
                 $new_source = trailingslashit( $remote_source ) . dirname( $plugin );
                 $wp_filesystem->move( $source, $new_source );
                 return trailingslashit( $new_source );
