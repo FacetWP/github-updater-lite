@@ -5,12 +5,12 @@ defined( 'ABSPATH' ) or exit;
 if ( ! class_exists( 'GHU_Core' ) ) {
     class GHU_Core
     {
-        public $update_data;
-        public $active_plugins;
+        public $update_data = array();
+        public $active_plugins = array();
 
 
         function __construct() {
-            add_action( 'admin_init', array( $this, 'admin_init' ), 99 );
+            add_action( 'admin_init', array( $this, 'admin_init' ) );
             add_filter( 'plugins_api', array( $this, 'plugins_api' ), 10, 3 );
             add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'set_update_data' ) );
             add_filter( 'upgrader_source_selection', array( $this, 'upgrader_source_selection' ), 10, 4 );
