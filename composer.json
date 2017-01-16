@@ -1,0 +1,11 @@
+{
+    "name": "FacetWP/github-updater-lite",
+    "description": "Drop-in support for GitHub automatic updates",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Matt Gibbs",
+            "email": "matt@facetwp.com"
+        }
+    ]
+}
