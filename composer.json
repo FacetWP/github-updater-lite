@@ -1,7 +1,7 @@
 {
     "name": "FacetWP/github-updater-lite",
     "description": "Drop-in support for GitHub automatic updates",
-    "license": "GPL-2.0+",
+    "license": "MIT",
     "authors": [
         {
             "name": "Matt Gibbs",
