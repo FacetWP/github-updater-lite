@@ -9,10 +9,5 @@
             "name": "Matt Gibbs",
             "homepage": "https://facetwp.com/"
         }
-    ],
-    "autoload": {
-        "files": [
-            "github-updater.php"
-        ]
-    }
+    ]
 }
