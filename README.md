@@ -17,6 +17,8 @@ Then, add `github-updater.php` to your plugin folder, and `include()` it from wi
 include( dirname( __FILE__ ) . '/github-updater.php' );
 ```
 
+> Note: This `include( ... )` line is not needed if you pull this package in via Composer and use Compsoer's autoloader.
+
 The code fetches [git tags](https://git-scm.com/book/en/v2/Git-Basics-Tagging) to determine whether updates are available.
 
 That's it, have fun!
