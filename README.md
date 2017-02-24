@@ -11,7 +11,7 @@ Add the following line to your plugin's meta information, replacing `owner/repo`
 GitHub URI: owner/repo
 ```
 
-Then, add `github-updater.php` to your plugin folder, and `include()` it from within your main plugin file.
+Then, add `github-updater.php` to your plugin folder, and `include()` it from within your main plugin file. Make sure it loads _before_ the `plugins_loaded` action fires.
 
 ```php
 include( dirname( __FILE__ ) . '/github-updater.php' );
