@@ -92,7 +92,7 @@ if ( ! class_exists( 'GHU_Core' ) ) {
                         'name'          => $plugin['name'],
                         'slug'          => $plugin['plugin'],
                         'version'       => $plugin['new_version'],
-                        'requires'      => '4.4',
+                        'requires'      => '4.7',
                         'tested'        => get_bloginfo( 'version' ),
                         'last_updated'  => date( 'Y-m-d' ),
                         'sections' => array(
