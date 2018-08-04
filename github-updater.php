@@ -25,8 +25,8 @@ if ( ! class_exists( 'GHU_Core' ) ) {
             $this->update_data = (array) get_option( 'ghu_update_data' );
             $active = (array) get_option( 'active_plugins' );
 
-            foreach ( $active as $slug ) {
-                $this->active_plugins[ $slug ] = true;
+            foreach ( $active as $plugin_file ) {
+                $this->active_plugins[ $plugin_file ] = true;
             }
 
             // transient expiration
@@ -45,11 +45,11 @@ if ( ! class_exists( 'GHU_Core' ) ) {
         function get_github_updates() {
             $plugin_data = array();
             $plugins = get_plugins();
-            foreach ( $plugins as $slug => $info ) {
-                if ( isset( $this->active_plugins[ $slug ] ) && ! empty( $info['GitHub URI'] ) ) {
+            foreach ( $plugins as $plugin_file => $info ) {
+                if ( isset( $this->active_plugins[ $plugin_file ] ) && ! empty( $info['GitHub URI'] ) ) {
                     $temp = array(
-                        'plugin'            => $slug,
-                        'slug'              => trim( dirname( $slug ), '/' ),
+                        'plugin'            => $plugin_file,
+                        'slug'              => trim( dirname( $plugin_file ), '/' ),  // TODO check plugin without dir
                         'name'              => $info['Name'],
                         'github_repo'       => $info['GitHub URI'],
                         'description'       => $info['Description'],
@@ -71,7 +71,7 @@ if ( ! class_exists( 'GHU_Core' ) ) {
                         $temp['new_version'] = $latest_tag['name'];
                         $temp['url'] = "https://github.com/$owner/$repo/";
                         $temp['package'] = $latest_tag['zipball_url'];
-                        $plugin_data[ $slug ] = $temp;
+                        $plugin_data[ $plugin_file ] = $temp;
                     }
                 }
             }
@@ -85,20 +85,20 @@ if ( ! class_exists( 'GHU_Core' ) ) {
          */
         function plugins_api( $default = false, $action, $args ) {
             if ( 'plugin_information' == $action ) {
-                if ( isset( $this->update_data[ $args->slug ] ) ) {
-                    $plugin = $this->update_data[ $args->slug ];
-
-                    return (object) array(
-                        'name'          => $plugin['name'],
-                        'slug'          => $plugin['plugin'],
-                        'version'       => $plugin['new_version'],
-                        'requires'      => '4.7',
-                        'tested'        => get_bloginfo( 'version' ),
-                        'last_updated'  => date( 'Y-m-d' ),
-                        'sections' => array(
-                            'description' => $plugin['description']
-                        )
-                    );
+                foreach ($this->update_data as $plugin_file => $info) {
+                    if ( $info['slug'] == $args->slug ) {
+                        return (object) array(
+                            'name'          => $info['name'],
+                            'slug'          => $info['slug'],
+                            'version'       => $info['new_version'],
+                            'requires'      => '4.7',
+                            'tested'        => get_bloginfo( 'version' ),
+                            'last_updated'  => date( 'Y-m-d' ),
+                            'sections' => array(
+                                'description' => $info['description']
+                            )
+                        );
+                    }
                 }
             }
 
@@ -111,13 +111,13 @@ if ( ! class_exists( 'GHU_Core' ) ) {
                 return $transient;
             }
 
-            foreach ( $this->update_data as $plugin => $info ) {
-                if ( isset( $this->active_plugins[ $plugin ] ) ) {
-                    $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+            foreach ( $this->update_data as $plugin_file => $info ) {
+                if ( isset( $this->active_plugins[ $plugin_file ] ) ) {
+                    $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_file );
                     $version = $plugin_data['Version'];
 
                     if ( version_compare( $version, $info['new_version'], '<' ) ) {
-                        $transient->response[ $plugin ] = (object) $info;
+                        $transient->response[ $plugin_file ] = (object) $info;
                     }
                 }
             }
