@@ -47,9 +47,10 @@ if ( ! class_exists( 'GHU_Core' ) ) {
             $plugins = get_plugins();
             foreach ( $plugins as $plugin_file => $info ) {
                 if ( isset( $this->active_plugins[ $plugin_file ] ) && ! empty( $info['GitHub URI'] ) ) {
+                    // TODO check slug for plugin without dir (no clear relation between plugin_file and slug in WP)
                     $temp = array(
                         'plugin'            => $plugin_file,
-                        'slug'              => trim( dirname( $plugin_file ), '/' ),  // TODO check plugin without dir
+                        'slug'              => trim( dirname( $plugin_file ), '/' ),
                         'name'              => $info['Name'],
                         'github_repo'       => $info['GitHub URI'],
                         'description'       => $info['Description'],
@@ -91,9 +92,7 @@ if ( ! class_exists( 'GHU_Core' ) ) {
                             'name'          => $info['name'],
                             'slug'          => $info['slug'],
                             'version'       => $info['new_version'],
-                            'requires'      => '4.7',
-                            'tested'        => get_bloginfo( 'version' ),
-                            'last_updated'  => date( 'Y-m-d' ),
+                            'download_link' => $info['package'],
                             'sections' => array(
                                 'description' => $info['description']
                             )
