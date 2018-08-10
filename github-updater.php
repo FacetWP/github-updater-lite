@@ -107,10 +107,6 @@ if ( ! class_exists( 'GHU_Core' ) ) {
 
 
         function set_update_data( $transient ) {
-            if ( empty( $transient->checked ) ) {
-                return $transient;
-            }
-
             foreach ( $this->update_data as $plugin => $info ) {
                 if ( isset( $this->active_plugins[ $plugin ] ) ) {
                     $plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
